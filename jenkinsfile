@@ -1,0 +1,25 @@
+pipeline {
+    agent any // Use any available Jenkins agent
+
+    environment {
+        NODE_ENV = 'production' // Set the desired environment if needed
+    }
+
+    stages {
+        stage('git Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sh 'yarn install'
+                   }
+                }
+            }
+        
+    }
+}
+
