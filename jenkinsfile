@@ -1,25 +1,25 @@
 pipeline {
-    agent any // Use any available Jenkins agent
-
-    environment {
-        NODE_ENV = 'production' // Set the desired environment if needed
+  agent any // Use any available Jenkins agent
+  environment {
+    NODE_ENV = 'production' // Set the desired environment if needed
+  }
+  stages {
+    stage('git Checkout') {
+      steps {
+        checkout scm
+      }
     }
-
-    stages {
-        stage('git Checkout') {
-            steps {
-                checkout scm
-            }
+    stage('Install Dependencies') {
+      steps {
+        script {
+          def yarnCacheDir = "${HOME}/.yarn-cache"
+          sh "mkdir -p ${yarnCacheDir}"
+          withEnv(["YARN_CACHE=${yarnCacheDir}"]) {
+          sh 'yarn install'
+          }
         }
-
-        stage('Build') {
-            steps {
-                script {
-                    sh 'yarn install'
-                   }
-                }
-            }
-        
+      }
     }
+  }
 }
 
