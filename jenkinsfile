@@ -9,17 +9,21 @@ pipeline {
         checkout scm
       }
     }
-    stage('Install Dependencies') {
-      steps {
-        script {
-          def yarnCacheDir = "${HOME}/.yarn-cache"
-          sh "mkdir -p ${yarnCacheDir}"
-          withEnv(["YARN_CACHE=${yarnCacheDir}"]) {
-          sh 'yarn install'
+   stage('build') {
+            steps {
+                script {
+                    def pnpmCacheDir = "${HOME}/.pnpm-cache"
+                    sh "mkdir -p ${pnpmCacheDir}"
+                    sh "pnpm config set cache ${pnpmCacheDir}"
+                    sh "sudo npm install -g pnpm@8.9.2" 
+            }
           }
         }
+    
+    stage('Test') {
+      steps {
+        sh 'npm test' // Replace with your test command
       }
     }
   }
 }
-
